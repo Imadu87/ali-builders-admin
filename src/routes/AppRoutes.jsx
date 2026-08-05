@@ -7,6 +7,10 @@ import ForgotPassword from "../pages/auth/ForgotPassword";
 import VerifyOtp from "../pages/auth/VerifyOtp";
 import ResetPassword from "../pages/auth/ResetPassword";
 
+// Dashboard
+import DashboardLayout from "../layouts/DashboardLayout";
+import DashboardHome from "../pages/dashboard/DashboardHome";
+
 const AppRoutes = () => {
     return (
         <BrowserRouter>
@@ -24,6 +28,15 @@ const AppRoutes = () => {
                     <Route
                         path="/reset-password"
                         element={<ResetPassword />}
+                    />
+                </Route>
+
+
+                // Dashboard
+                <Route element={<DashboardLayout />}>
+                    <Route
+                        path="/dashboard"
+                        element={<DashboardHome />}
                     />
                 </Route>
             </Routes>
