@@ -1,6 +1,12 @@
 import { Menu, Bell } from "lucide-react";
 
+import NotificationDropdown from "./NotificationDropdown";
+import ProfileDropdown from "./ProfileDropdown";
+import { useState } from "react";
+
 const MobileHeader = ({ setSidebarOpen }) => {
+    const [notificationOpen, setNotificationOpen] = useState(false);
+    const [profileOpen, setProfileOpen] = useState(false);
     return (
         <header
             className="
@@ -60,64 +66,26 @@ const MobileHeader = ({ setSidebarOpen }) => {
 
             {/* Right Side */}
             <div className="flex items-center gap-2">
+                <NotificationDropdown
+                    open={notificationOpen}
+                    setOpen={(value) => {
+                        setNotificationOpen(value);
+                        if (value) {
+                            setProfileOpen(false);
+                        }
+                    }}
+                />
 
-                {/* Notifications */}
-                <button
-                    type="button"
-                    className="
-                        relative
-                        flex
-                        h-10
-                        w-10
-                        items-center
-                        justify-center
-                        rounded-lg
-                        text-gray-600
-                        transition-all
-                        duration-300
-                        hover:bg-green-50
-                        hover:text-secondary
-                    "
-                    aria-label="Notifications"
-                >
-                    <Bell size={21} />
+                <ProfileDropdown
+                    open={profileOpen}
+                    setOpen={(value) => {
+                        setProfileOpen(value);
+                        if (value) {
+                            setNotificationOpen(false);
+                        }
+                    }}
+                />
 
-                    {/* Notification Badge */}
-                    <span
-                        className="
-                            absolute
-                            right-1.5
-                            top-1.5
-                            h-2
-                            w-2
-                            rounded-full
-                            bg-red-500
-                        "
-                    />
-                </button>
-
-                {/* Profile */}
-                <button
-                    type="button"
-                    className="
-                        flex
-                        h-10
-                        w-10
-                        items-center
-                        justify-center
-                        rounded-full
-                        bg-secondary
-                        text-sm
-                        font-bold
-                        text-white
-                        transition-all
-                        duration-300
-                        hover:scale-105
-                    "
-                    aria-label="Admin profile"
-                >
-                    A
-                </button>
             </div>
         </header>
     );
