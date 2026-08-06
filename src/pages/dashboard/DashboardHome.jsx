@@ -12,6 +12,10 @@ import {
 import StatCard from "../../components/dashboard/cards/StatCard";
 import ProjectCard from "../../components/dashboard/cards/ProjectCard";
 
+import ProjectsOverviewChart from "../../components/dashboard/analytics/ProjectsOverviewChart";
+
+import InquiriesChart from "../../components/dashboard/analytics/InquiriesChart";
+
 import project1 from "../../assets/images/projects/project1/project1.1.jfif"
 import project2 from "../../assets/images/projects/project1/project1.2.jfif"
 import project3 from "../../assets/images/projects/project1/project1.3.jfif"
@@ -372,10 +376,9 @@ const DashboardHome = () => {
                                             py-1
                                             text-xs
                                             font-semibold
-                                            ${
-                                                inquiry.status === "New"
-                                                    ? "bg-green-50 text-green-600"
-                                                    : inquiry.status === "Pending"
+                                            ${inquiry.status === "New"
+                                                ? "bg-green-50 text-green-600"
+                                                : inquiry.status === "Pending"
                                                     ? "bg-orange-50 text-orange-600"
                                                     : "bg-gray-100 text-gray-600"
                                             }
@@ -566,6 +569,23 @@ const DashboardHome = () => {
                     </div>
                 </motion.div>
             </div>
+
+            {/* =========================
+                Analytics
+            ========================= */}
+
+            <section
+                className="
+        grid
+        grid-cols-1
+        gap-6
+        xl:grid-cols-2
+    "
+            >
+                <ProjectsOverviewChart />
+
+                <InquiriesChart />
+            </section>
 
 
             {/* =========================
