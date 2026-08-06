@@ -1,27 +1,48 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 import {
   Building2,
   FolderKanban,
   MessageSquare,
   Users,
   Plus,
-  ArrowRight,
-  Clock3,
 } from "lucide-react";
 
-import StatCard from "../../components/dashboard/cards/StatCard";
-import ProjectCard from "../../components/dashboard/cards/ProjectCard";
-
+import StatisticsSection from "../../components/dashboard/stats/StatisticsSection";
 import ProjectsOverviewChart from "../../components/dashboard/analytics/ProjectsOverviewChart";
-
 import InquiriesChart from "../../components/dashboard/analytics/InquiriesChart";
+import RecentActivity from "../../components/dashboard/activity/RecentActivity";
+import RecentInquiries from "../../components/dashboard/inquiries/RecentInquiries";
+import QuickActions from "../../components/dashboard/actions/QuickActions";
+import RecentProjects from "../../components/dashboard/projects/RecentProjects";
+
+import DashboardSkeleton from "../../components/dashboard/common/DashboardSkeleton";
+import DashboardEmpty from "../../components/dashboard/common/DashboardEmpty";
+import DashboardError from "../../components/dashboard/common/DashboardError";
 
 import project1 from "../../assets/images/projects/project1/project1.1.jfif";
 import project2 from "../../assets/images/projects/project1/project1.2.jfif";
 import project3 from "../../assets/images/projects/project1/project1.3.jfif";
-import RecentActivity from "../../components/dashboard/activity/RecentActivity";
 
 const DashboardHome = () => {
+  const [statsLoading, setStatsLoading] = useState(false);
+  const [statsError, setStatsError] = useState(false);
+
+  const [inquiriesLoading, setInquiriesLoading] = useState(false);
+  const [inquiriesError, setInquiriesError] = useState(false);
+
+  const [projectsAnalyticsLoading, setProjectsAnalyticsLoading] = useState(false);
+  const [projectsAnalyticsError, setProjectsAnalyticsError] = useState(false);
+
+  const [inquiriesAnalyticsLoading, setInquiriesAnalyticsLoading] = useState(false);
+  const [inquiriesAnalyticsError, setInquiriesAnalyticsError] = useState(false);
+
+  const [activityLoading, setActivityLoading] = useState(false);
+  const [activityError, setActivityError] = useState(false);
+
+  const [projectsLoading, setProjectsLoading] = useState(false);
+  const [projectsError, setProjectsError] = useState(false);
+
   /* =========================
        Statistics
     ========================= */
@@ -152,20 +173,11 @@ const DashboardHome = () => {
         transition={{
           duration: 0.4,
         }}
-        className="
-                    flex
-                    flex-col
-                    gap-4
-                    sm:flex-row
-                    sm:items-center
-                    sm:justify-between
-                "
-      >
+        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-heading sm:text-3xl">
             Dashboard Overview
           </h1>
-
           <p className="mt-1 text-sm text-text sm:text-base">
             Here's what's happening with Ali Builders today.
           </p>
@@ -173,27 +185,7 @@ const DashboardHome = () => {
 
         <button
           type="button"
-          className="
-                        flex
-                        w-full
-                        items-center
-                        justify-center
-                        gap-2
-                        rounded-xl
-                        bg-secondary
-                        px-5
-                        py-3
-                        text-sm
-                        font-semibold
-                        text-white
-                        shadow-sm
-                        transition-all
-                        duration-300
-                        hover:-translate-y-0.5
-                        hover:shadow-lg
-                        sm:w-auto
-                    "
-        >
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-secondary px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg sm:w-auto">
           <Plus size={18} />
           Add Project
         </button>
@@ -202,449 +194,169 @@ const DashboardHome = () => {
       {/* =========================
                 Statistics
             ========================= */}
+      <StatisticsSection
+        stats={stats}
+        loading={statsLoading}
+        error={statsError}
+        onRetry={() => {
+          setStatsError(false);
+          setStatsLoading(true);
 
-      <div
-        className="
-                    grid
-                    grid-cols-1
-                    gap-4
-                    sm:grid-cols-2
-                    xl:grid-cols-4
-                "
-      >
-        {stats.map((stat, index) => (
-          <motion.div
-            key={stat.title}
-            initial={{
-              opacity: 0,
-              y: 20,
-            }}
-            animate={{
-              opacity: 1,
-              y: 0,
-            }}
-            transition={{
-              delay: index * 0.08,
-              duration: 0.4,
-            }}
-          >
-            <StatCard {...stat} />
-          </motion.div>
-        ))}
-      </div>
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000);
+        }}
+      />
 
       {/* =========================
                 Recent Inquiries
                 + Quick Actions
             ========================= */}
-
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         {/* Recent Inquiries */}
-
-        <motion.div
-          initial={{
-            opacity: 0,
-            y: 20,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            delay: 0.35,
-            duration: 0.4,
-          }}
-          className="
-                        overflow-hidden
-                        rounded-2xl
-                        border
-                        border-border
-                        bg-white
-                        shadow-sm
-                        xl:col-span-2
-                    "
-        >
-          <div
-            className="
-                            flex
-                            items-center
-                            justify-between
-                            border-b
-                            border-border
-                            px-5
-                            py-4
-                        "
-          >
-            <div>
-              <h2 className="font-semibold text-heading">Recent Inquiries</h2>
-
-              <p className="mt-1 text-xs text-text">
-                Latest customer inquiries
-              </p>
-            </div>
-
-            <button
-              type="button"
-              className="
-                                flex
-                                items-center
-                                gap-1
-                                text-sm
-                                font-semibold
-                                text-secondary
-                                hover:underline
-                            "
-            >
-              View All
-              <ArrowRight size={15} />
-            </button>
-          </div>
-
-          <div className="divide-y divide-border">
-            {recentInquiries.map((inquiry) => (
-              <div
-                key={inquiry.id}
-                className="
-                                    flex
-                                    flex-col
-                                    gap-3
-                                    px-5
-                                    py-4
-                                    transition
-                                    hover:bg-gray-50
-                                    sm:flex-row
-                                    sm:items-center
-                                    sm:justify-between
-                                "
-              >
-                <div className="flex min-w-0 items-center gap-3">
-                  <div
-                    className="
-                                            flex
-                                            h-10
-                                            w-10
-                                            shrink-0
-                                            items-center
-                                            justify-center
-                                            rounded-full
-                                            bg-green-50
-                                            text-sm
-                                            font-bold
-                                            text-secondary
-                                        "
-                  >
-                    {inquiry.name.charAt(0)}
-                  </div>
-
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-heading">
-                      {inquiry.name}
-                    </p>
-                    <p className="truncate text-xs text-text">
-                      {inquiry.subject}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between gap-4 sm:justify-end">
-                  <span
-                    className={`
-                                            rounded-full
-                                            px-2.5
-                                            py-1
-                                            text-xs
-                                            font-semibold
-                                            ${
-                                              inquiry.status === "New"
-                                                ? "bg-green-50 text-green-600"
-                                                : inquiry.status === "Pending"
-                                                  ? "bg-orange-50 text-orange-600"
-                                                  : "bg-gray-100 text-gray-600"
-                                            }
-                                        `}
-                  >
-                    {inquiry.status}
-                  </span>
-
-                  <div className="flex items-center gap-1 text-xs text-text">
-                    <Clock3 size={13} />
-                    {inquiry.time}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
+        <div className="xl:col-span-2">
+          {inquiriesLoading ? (
+            <DashboardSkeleton
+              type="activity"
+              count={4}
+            />
+          ) : inquiriesError ? (
+            <DashboardError
+              title="Inquiries couldn't load"
+              description="We couldn't load recent customer inquiries."
+              onRetry={() => {
+                setInquiriesError(false);
+                setInquiriesLoading(true);
+                setTimeout(() => {
+                  setInquiriesLoading(false);
+                }, 1000);
+              }}
+            />
+          ) : recentInquiries.length === 0 ? (
+            <DashboardEmpty
+              title="No Recent Inquiries"
+              description="There are no customer inquiries yet."
+            />
+          ) : (
+            <RecentInquiries
+              inquiries={recentInquiries}
+              onViewAll={() => {
+                console.log("Navigate to inquiries");
+              }}
+            />
+          )}
+        </div>
         {/* Quick Actions */}
-
-        <motion.div
-          initial={{
-            opacity: 0,
-            y: 20,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            delay: 0.4,
-            duration: 0.4,
-          }}
-          className="
-                        rounded-2xl
-                        border
-                        border-border
-                        bg-white
-                        p-5
-                        shadow-sm
-                    "
-        >
-          <div>
-            <h2 className="font-semibold text-heading">Quick Actions</h2>
-            <p className="mt-1 text-xs text-text">Frequently used actions</p>
-          </div>
-
-          <div className="mt-5 space-y-3">
-            <button
-              type="button"
-              className="
-                                flex
-                                w-full
-                                items-center
-                                gap-3
-                                rounded-xl
-                                border
-                                border-border
-                                p-3
-                                text-left
-                                transition-all
-                                duration-300
-                                hover:border-secondary
-                                hover:bg-green-50
-                            "
-            >
-              <div
-                className="
-                                    flex
-                                    h-10
-                                    w-10
-                                    items-center
-                                    justify-center
-                                    rounded-lg
-                                    bg-green-50
-                                    text-secondary
-                                "
-              >
-                <Plus size={19} />
-              </div>
-
-              <div>
-                <p className="text-sm font-semibold text-heading">
-                  Add New Project
-                </p>
-                <p className="text-xs text-text">Create a new project</p>
-              </div>
-            </button>
-
-            <button
-              type="button"
-              className="
-                                flex
-                                w-full
-                                items-center
-                                gap-3
-                                rounded-xl
-                                border
-                                border-border
-                                p-3
-                                text-left
-                                transition-all
-                                duration-300
-                                hover:border-secondary
-                                hover:bg-green-50
-                            "
-            >
-              <div
-                className="
-                                    flex
-                                    h-10
-                                    w-10
-                                    items-center
-                                    justify-center
-                                    rounded-lg
-                                    bg-blue-50
-                                    text-blue-600
-                                "
-              >
-                <MessageSquare size={19} />
-              </div>
-
-              <div>
-                <p className="text-sm font-semibold text-heading">
-                  View Inquiries
-                </p>
-                <p className="text-xs text-text">Check customer messages</p>
-              </div>
-            </button>
-
-            <button
-              type="button"
-              className="
-                                flex
-                                w-full
-                                items-center
-                                gap-3
-                                rounded-xl
-                                border
-                                border-border
-                                p-3
-                                text-left
-                                transition-all
-                                duration-300
-                                hover:border-secondary
-                                hover:bg-green-50
-                            "
-            >
-              <div
-                className="
-                                    flex
-                                    h-10
-                                    w-10
-                                    items-center
-                                    justify-center
-                                    rounded-lg
-                                    bg-purple-50
-                                    text-purple-600
-                                "
-              >
-                <Users size={19} />
-              </div>
-
-              <div>
-                <p className="text-sm font-semibold text-heading">
-                  Manage Team
-                </p>
-                <p className="text-xs text-text">View team members</p>
-              </div>
-            </button>
-          </div>
-        </motion.div>
+        <QuickActions />
       </div>
 
       {/* =========================
-                Analytics
-            ========================= */}
+             Analytics
+        ========================= */}
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        {/* =========================
+        Projects Analytics
+          ========================= */}
+        {projectsAnalyticsLoading ? (
+          <DashboardSkeleton
+            type="card"
+          />
+        ) : projectsAnalyticsError ? (
+          <DashboardError
+            title="Projects analytics unavailable"
+            description="We couldn't load project analytics right now."
+            onRetry={() => {
+              setProjectsAnalyticsError(false);
+              setProjectsAnalyticsLoading(true);
+              setTimeout(() => {
+                setProjectsAnalyticsLoading(false);
+              }, 1000);
+            }}
+          />
+        ) : (
+          <ProjectsOverviewChart />
+        )}
 
-      <section
-        className="
-        grid
-        grid-cols-1
-        gap-6
-        xl:grid-cols-2
-    "
-      >
-        <ProjectsOverviewChart />
 
-        <InquiriesChart />
-      </section>
-
-      {/* Recent Activity */}
-
-      <section className="mt-6">
-        <RecentActivity />
+        {/* =========================
+        Inquiries Analytics
+        ========================= */}
+        {inquiriesAnalyticsLoading ? (
+          <DashboardSkeleton
+            type="card"
+          />
+        ) : inquiriesAnalyticsError ? (
+          <DashboardError
+            title="Inquiries analytics unavailable"
+            description="We couldn't load inquiry analytics right now."
+            onRetry={() => {
+              setInquiriesAnalyticsError(false);
+              setInquiriesAnalyticsLoading(true);
+              setTimeout(() => {
+                setInquiriesAnalyticsLoading(false);
+              }, 1000);
+            }}
+          />
+        ) : (
+          <InquiriesChart />
+        )}
       </section>
 
       {/* =========================
-                Recent Projects
-            ========================= */}
+          Recent Activity
+          ========================= */}
 
-      <motion.section
-        initial={{
-          opacity: 0,
-          y: 20,
-        }}
-        animate={{
-          opacity: 1,
-          y: 0,
-        }}
-        transition={{
-          delay: 0.45,
-          duration: 0.4,
-        }}
-      >
-        {/* Section Header */}
-
-        <div
-          className="
-                        mb-4
-                        flex
-                        flex-col
-                        gap-2
-                        sm:flex-row
-                        sm:items-center
-                        sm:justify-between
-                    "
-        >
-          <div>
-            <h2 className="text-lg font-bold text-heading">Recent Projects</h2>
-
-            <p className="mt-1 text-sm text-text">
-              Overview of your latest projects
-            </p>
+      <section className="mt-6">
+        {activityLoading ? (
+          <div className="rounded-2xl border border-border bg-white p-5 shadow-sm">
+            <div className="mb-6 space-y-2">
+              <div className="h-5 w-40 animate-pulse rounded bg-gray-200" />
+              <div className="h-3 w-64 animate-pulse rounded bg-gray-200" />
+            </div>
+            <DashboardSkeleton
+              type="activity"
+              count={4}
+            />
           </div>
+        ) : activityError ? (
+          <DashboardError
+            title="Activity couldn't load"
+            description="We couldn't load recent activity right now. Please try again."
+            onRetry={() => {
+              setActivityError(false);
+              setActivityLoading(true);
+              setTimeout(() => {
+                setActivityLoading(false);
+              }, 1000);
+            }}
+          />
+        ) : (
+          <RecentActivity />
+        )}
+      </section>
 
-          <button
-            type="button"
-            className="
-                            flex
-                            w-fit
-                            items-center
-                            gap-1
-                            text-sm
-                            font-semibold
-                            text-secondary
-                            transition
-                            hover:underline
-                        "
-          >
-            View All Projects
-            <ArrowRight size={16} />
-          </button>
-        </div>
+      {/* =========================
+        Recent Projects
+      ========================= */}
+      <RecentProjects
+        projects={recentProjects}
+        loading={projectsLoading}
+        error={projectsError}
+        onRetry={() => {
+          setProjectsError(false);
+          setProjectsLoading(true);
 
-        {/* Project Cards */}
-
-        <div
-          className="
-                        grid
-                        grid-cols-1
-                        gap-5
-                        md:grid-cols-2
-                        xl:grid-cols-3
-                    "
-        >
-          {recentProjects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              initial={{
-                opacity: 0,
-                y: 20,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              transition={{
-                delay: 0.5 + index * 0.08,
-                duration: 0.4,
-              }}
-            >
-              <ProjectCard {...project} />
-            </motion.div>
-          ))}
-        </div>
-      </motion.section>
+          setTimeout(() => {
+            setProjectsLoading(false);
+          }, 1000);
+        }}
+        onViewAll={() => {
+          console.log("View all projects");
+        }}
+        onAddProject={() => {
+          console.log("Open add project");
+        }}
+      />
     </div>
   );
 };
