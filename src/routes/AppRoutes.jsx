@@ -11,6 +11,10 @@ import ResetPassword from "../pages/auth/ResetPassword";
 import DashboardLayout from "../layouts/DashboardLayout";
 import DashboardHome from "../pages/dashboard/DashboardHome";
 
+// Projects
+import Projects from "../pages/projects/Projects";
+import ProjectDetails from "../pages/projects/ProjectDetails";
+
 const AppRoutes = () => {
     return (
         <BrowserRouter>
@@ -37,6 +41,14 @@ const AppRoutes = () => {
                     <Route
                         path="/dashboard"
                         element={<DashboardHome />}
+                    />
+                    <Route
+                        path="/projects"
+                        element={<Projects />}
+                    />
+                    <Route
+                        path="/projects/:id"
+                        element={<ProjectDetails />}
                     />
                 </Route>
             </Routes>

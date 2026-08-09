@@ -18,42 +18,42 @@ export const sidebarMenu = [
   },
   {
     title: "Projects",
-    path: "/dashboard/projects",
+    path: "/projects",
     icon: FolderKanban,
   },
   {
     title: "Leadership",
-    path: "/dashboard/leadership",
+    path: "/leadership",
     icon: BriefcaseBusiness,
   },
   {
     title: "Team",
-    path: "/dashboard/team",
+    path: "/team",
     icon: Users,
   },
   {
     title: "Services",
-    path: "/dashboard/services",
+    path: "/services",
     icon: BriefcaseBusiness,
   },
   {
     title: "Gallery",
-    path: "/dashboard/gallery",
+    path: "/gallery",
     icon: Image,
   },
   {
     title: "File Verification",
-    path: "/dashboard/file-verification",
+    path: "/file-verification",
     icon: ShieldCheck,
   },
   {
     title: "Messages",
-    path: "/dashboard/messages",
+    path: "/messages",
     icon: Mail,
   },
   {
     title: "Settings",
-    path: "/dashboard/settings",
+    path: "/settings",
     icon: Settings,
   },
 ];
